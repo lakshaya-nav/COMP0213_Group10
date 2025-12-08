@@ -38,7 +38,8 @@ class Gripper(ABC):
         Number of joints in the loaded URDF model.
     """
 
-    def __init__(self, urdf_path: str, base_position: tuple[float, float, float], base_orientation: tuple[float, float, float]):
+    def __init__(self, urdf_path: str, base_position: tuple[float, float, float],
+                  base_orientation: tuple[float, float, float]):
         self._urdf_path = urdf_path
         self.base_position = list(base_position)
         self.base_orientation = p.getQuaternionFromEuler(base_orientation)
@@ -57,7 +58,8 @@ class Gripper(ABC):
             The PyBullet body unique ID of the loaded gripper
         """
 
-        self.id = p.loadURDF(self._urdf_path, basePosition=self.base_position, baseOrientation=self.base_orientation)
+        self.id = p.loadURDF(self._urdf_path, basePosition=self.base_position, 
+                             baseOrientation=self.base_orientation)
 
         # Storing num of joints
         self.num_joints = p.getNumJoints(self.id)
@@ -89,7 +91,8 @@ class Gripper(ABC):
         """
         Generate n random points on a spherical surface around the object
 
-        This method samples points uniformly on a spherical surface restricted to a polar angle range (0° to 80°), with norm/gaussian noise
+        This method samples points uniformly on a spherical surface restricted to a polar angle range 
+        (0° to 80°), with norm/gaussian noise
         The sampled points can be used as the approach or grasp points
 
         Parameters:
