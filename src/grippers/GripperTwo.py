@@ -95,13 +95,15 @@ class TwoFingerGripper(Gripper):
         return pitch_noisy, roll_noisy, yaw_noisy
 
     # Moving up the gripper
-    def move_up(self, z: float):
+    def move_up(self, z: float, yaw_angle: float =0.0):
         """
         Moves the gripper vertically upward, but also maintains current orientation
 
         Parameters: 
         z : float
             Desired Z-height for the gripper base.
+        yaw_angle : float, optional
+            Desired yaw angle for the gripper orientation.
 
         Raises: 
         ValueError
