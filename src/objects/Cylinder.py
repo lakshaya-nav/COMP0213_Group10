@@ -10,5 +10,5 @@ class Cylinder(BaseObject):
             grasp_height (float): The default height above the cylinder at which it can be grasped.
     """
     def __init__(self, position, orientation=(0, 0, 0), scale=1.0):
-        super().__init__('cylinder.urdf', position, orientation, scale)
+        super().__init__('objects/urdf_files/cylinder.urdf', position, orientation, scale)
         self.grasp_height = 0.1

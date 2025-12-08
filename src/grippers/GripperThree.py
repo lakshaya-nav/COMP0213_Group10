@@ -26,7 +26,8 @@ class ThreeFingerGripper(Gripper):
         The SDH hand uses 9 total joints:
         - Each finger has 3 joints: proximal, middle and distal.
         """
-        super().__init__("./grippers/threeFingers/sdh/sdh.urdf", (0, 0, 0), (0, 0, 0))
+
+        super().__init__("grippers/urdf_files/threeFingers/sdh/sdh.urdf", (0, 0, 0), (0, 0, 0))
 
         # Set the number of joints and initial states
         self.num_joints = 9

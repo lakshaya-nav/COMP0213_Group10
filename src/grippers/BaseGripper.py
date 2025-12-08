@@ -9,7 +9,7 @@ class Gripper(ABC):
     Abstract base class for all gripper types used in the grasp planning system.
 
     This class defines the fundamental interface and common functionality for
-    grippers simulated in PyBullet. Concrete subclasses must implement 
+    urdf_files simulated in PyBullet. Concrete subclasses must implement
     the abstract methods for opening, closing, orienting, and executing 
     grasp-and-lift actions.
 

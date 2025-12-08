@@ -10,8 +10,8 @@ class Simulation:
 
     This class provides functionality for:
     - setting up the physics environment (visual and non-visual),
-    - spawning objects and grippers into the scene,
-    - commanding grippers to approach target objects,
+    - spawning objects and urdf_files into the scene,
+    - commanding urdf_files to approach target objects,
     - executing grasp attempts and lifting sequences,
     - maintaining friction, constraints, and simulation timing.
 
@@ -26,7 +26,7 @@ class Simulation:
         Parameters:
         objects : list
             A list of object instances to be spawned.
-        grippers : list
+        urdf_files : list
             A list of gripper instances (TwoFingerGripper, ThreeFingerGripper, etc.).
         envs : list
             A list of environment data structures storing sampling positions,
@@ -37,7 +37,7 @@ class Simulation:
         self.grippers = grippers
         self.envs = envs
 
-        # Number of objects and grippers
+        # Number of objects and urdf_files
         self.num_objects = len(self.objects)
         self.num_grippers = len(self.grippers)
 
@@ -90,7 +90,7 @@ class Simulation:
 
     def spawn_grippers(self):
         """
-        Loads all grippers into the simulation and prepares them for interaction.
+        Loads all urdf_files into the simulation and prepares them for interaction.
 
         Notes:
         - A fixed constraint is created to anchor each gripper.
@@ -114,7 +114,7 @@ class Simulation:
     def move_towards_objs_and_close(self, i: int):
         """
         Moves each gripper toward its target object position and closes the gripper
-        once all grippers have reached their respective approach points.
+        once all urdf_files have reached their respective approach points.
 
         Parameters:
         i : int  
@@ -126,14 +126,14 @@ class Simulation:
             0 otherwise. (Deals with potential infinite loops.)
 
         Notes:
-        - All grippers are moved simultaneously in a loop until they reach their targets.
+        - All urdf_files are moved simultaneously in a loop until they reach their targets.
         - Grippers move along the direction vector computed by find_orientation().
         - A threshold distance of 0.03 m is used to consider a gripper as "reached".
         """
                 
         step_size = 0.05
 
-        # Ensure all grippers are properly anchored
+        # Ensure all urdf_files are properly anchored
         for g in self.grippers:
             if g.constraint_id is None:
                 raise ValueError("Gripper must be fixed before moving.")
@@ -142,7 +142,7 @@ class Simulation:
         count = 0
         terminate = 0
 
-        # Motion loop until all grippers reach targets
+        # Motion loop until all urdf_files reach targets
         while reached != [1,1,1,1]:
             if count > 100:
                 terminate = 1
@@ -189,14 +189,14 @@ class Simulation:
 
     def lift_objects(self, lift_height: float =0.4):
         """
-        Lifts all grasped objects by raising the grippers vertically over a given height.
+        Lifts all grasped objects by raising the urdf_files vertically over a given height.
 
         Parameters:
         lift_height : float, optional
             The total vertical distance applied during the lifting action.
 
         Notes:
-        - Two-finger and three-finger grippers use different joint actuation schemes.
+        - Two-finger and three-finger urdf_files use different joint actuation schemes.
         - The motion is carried out incrementally for simulation stability.
         """
 
@@ -207,7 +207,7 @@ class Simulation:
         final_pos = []
         step_size = 0.01
 
-        # Categorise grippers by type
+        # Categorise urdf_files by type
         for g in self.grippers:
             position = p.getBasePositionAndOrientation(g.id)[0]
             position_list = list(position)
@@ -230,9 +230,9 @@ class Simulation:
         current_pos_2 = start_pos_2
         current_pos_3 = start_pos_3
 
-        # Lift sequence for two-finger grippers
+        # Lift sequence for two-finger urdf_files
         while current_pos_2[0][2] <= final_pos[0][2] and current_pos_2[1][2] <= final_pos[1][2]:
-            # Move two-finger grippers up
+            # Move two-finger urdf_files up
             for g, pos in zip(grippers_2, current_pos_2):
                 pos[2] += step_size
                 g.move_up(pos[2], 0.0)
@@ -244,7 +244,7 @@ class Simulation:
                 p.stepSimulation()
                 time.sleep(0.01)
                 
-        # Lift sequence for three-finger grippers
+        # Lift sequence for three-finger urdf_files
         while current_pos_3[0][2] <= final_pos[2][2] and current_pos_3[1][2] <= final_pos[3][2]:
             for g, pos in zip(grippers_3, current_pos_3):
 
@@ -268,7 +268,7 @@ class Simulation:
         Maintains finger closure for ≈3 seconds to stabilise the grasp.
 
         Notes:
-        - Applies sustained joint torques for three-finger grippers.
+        - Applies sustained joint torques for three-finger urdf_files.
         - Ensures the object does not slip after lifting.
         """
 
@@ -291,7 +291,7 @@ class Simulation:
 
     def remove_objs(self):
         """
-        Removes all grippers and objects from the simulation environment.
+        Removes all urdf_files and objects from the simulation environment.
 
         Notes:
         - removes constraints for safety, then removes bodies.
