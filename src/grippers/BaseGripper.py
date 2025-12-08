@@ -52,8 +52,7 @@ class Gripper(ABC):
         """
         Load gripper URDF into the PyBullet simulation
 
-        Returns
-        -------
+        Returns:
         int
             The PyBullet body unique ID of the loaded gripper
         """
