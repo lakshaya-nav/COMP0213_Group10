@@ -1,7 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-def create_points_sphere(radius: float, n: int):
+def create_points_sphere(radius: float, n: int) -> tuple[list[float], list[float], list[float]]:
     """
         Generate n random points on the surface of a semisphere with a given radius.
 

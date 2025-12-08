@@ -29,7 +29,7 @@ class LogReg:
     """
     col_names = ['x', 'y', 'z', 'pitch', 'roll', 'yaw', 'output']
 
-    def __init__(self, file_name: str):
+    def __init__(self, file_name: str) -> None:
         """
         Initializes the LogReg class with the target file.
 
@@ -38,7 +38,7 @@ class LogReg:
         """
         self.file_name = file_name
 
-    def read_file(self):
+    def read_file(self) -> tuple[pd.DataFrame, pd.Series]:
         """
         Reads and preprocesses the CSV data.
 
@@ -62,7 +62,7 @@ class LogReg:
         self.y = data.output.astype(int)  # Target variable
         return self.X, self.y
 
-    def conduct_regression(self):
+    def conduct_regression(self) -> tuple[np.ndarray, np.ndarray]:
         """
         Trains the Logistic Regression model and generates the predictions with y_pred.
 
@@ -96,7 +96,7 @@ class LogReg:
         self.y_pred = y_pred
         return y_test, y_pred
 
-    def accuracy_precision_recall_f1(self):
+    def accuracy_precision_recall_f1(self) -> None:
         """
         Calculates and prints standard classification performance metrics.
 
@@ -114,7 +114,7 @@ class LogReg:
         print("Logistic Regression Recall:", metrics.recall_score(self.y_test, self.y_pred))
         print("Logistic Regression F1 Score:", metrics.f1_score(self.y_test, self.y_pred))
 
-    def confusion_matrix(self):
+    def confusion_matrix(self) -> None:
         """
         Generates and displays a Confusion Matrix heatmap.
 
@@ -141,7 +141,7 @@ class LogReg:
         plt.xlabel('Predicted label')
         plt.show(block=False)
 
-    def roc_curve(self):
+    def roc_curve(self) -> None:
         """
         Plots the Receiver Operating Characteristic (ROC) curve.
 
@@ -167,7 +167,7 @@ class LogReg:
         plt.ylabel('True Positive Rate')
         plt.show()
 
-    def matthews_cc(self):
+    def matthews_cc(self) -> None:
         """
         Calculates and prints the Matthews Correlation Coefficient (MCC).
 
@@ -178,7 +178,7 @@ class LogReg:
         self.y_test, self.y_pred = self.conduct_regression()
         print("Matthew's correlation coefficient:", metrics.matthews_corrcoef(self.y_test, self.y_pred))
 
-    def full_operation(self):
+    def full_operation(self) -> None:
         """
         Orchestrates the complete data analysis pipeline.
 
@@ -206,7 +206,7 @@ class LogReg:
         model_path = model_dir / f"{file_stem}.pkl"
         self.save_model(model_path)
 
-    def save_model(self, output_path="model.pkl"):
+    def save_model(self, output_path="model.pkl") -> None:
         """
         Saves trained Logistic Regression model to a .pkl file.
 
@@ -222,7 +222,7 @@ class LogReg:
             pickle.dump(self.logreg, f)
 
 
-def run_models():
+def run_models() -> None:
     """
     Instantiates and executes the LogReg pipeline for multiple dataset configurations.
 
@@ -250,5 +250,3 @@ def run_models():
 
     file4 = LogReg("../data/dataset_g3_cylinder_final.csv")
     file4.full_operation()
-
-run_models()

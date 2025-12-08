@@ -1,4 +1,5 @@
 from grippers.BaseGripper import Gripper
+from objects.BaseObject import BaseObject
 import pybullet as p
 import time
 import math
@@ -17,7 +18,7 @@ class TwoFingerGripper(Gripper):
     It is the subclasses of Gripper, which defines the core interface for all
     gripper types used in the grasp planning pipeline.
     """
-    def __init__(self):
+    def __init__(self) -> None:
         """
         Initialise a two-finger gripper using the PR2 gripper URDF
         The gripper is spawned at pos: (0, 0, 0) with zero orientation
@@ -25,7 +26,7 @@ class TwoFingerGripper(Gripper):
         super().__init__('pr2_gripper.urdf', (0, 0, 0), (0, 0, 0))
 
     # Opening the gripper 
-    def open_gripper(self):
+    def open_gripper(self) -> None:
         """
         Fully opens both fingers of the gripper 
 
@@ -40,7 +41,7 @@ class TwoFingerGripper(Gripper):
             p.resetJointState(self.id, i, pos)
 
     # Closing the gripper 
-    def close_gripper(self):
+    def close_gripper(self) -> None:
         """
         Closing the two finger joints(0 and 2) using position control
 
@@ -53,7 +54,7 @@ class TwoFingerGripper(Gripper):
                                     targetPosition=0.1, maxVelocity=10, force=100)
 
     # Finding orientation for grasping
-    def find_orientation(self, obj_position: tuple[float, float, float]):
+    def find_orientation(self, obj_position: tuple[float, float, float]) -> tuple[float, float, float]:
         """
         Computes a noisy approach orientation toward the object
 
@@ -95,7 +96,7 @@ class TwoFingerGripper(Gripper):
         return pitch_noisy, roll_noisy, yaw_noisy
 
     # Moving up the gripper
-    def move_up(self, z: float, yaw_angle: float =0.0):
+    def move_up(self, z: float) -> None:
         """
         Moves the gripper vertically upward, but also maintains current orientation
 
@@ -130,7 +131,7 @@ class TwoFingerGripper(Gripper):
         )
 
     # Grasp and lift method
-    def grasp_lift(self, obj: object, lift_height:float =0.4, lift_steps:int =150):
+    def grasp_lift(self, obj: BaseObject, lift_height:float =0.4, lift_steps:int =150) -> None:
         """
         Perform a grasping lift operation after making contact with an object.
 

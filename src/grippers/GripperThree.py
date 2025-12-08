@@ -17,7 +17,7 @@ class ThreeFingerGripper(Gripper):
     gripper types used in the grasp planning pipeline.
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         """
         Initialises the three-finger gripper using the SDH URDF.
         It is spawned at position (0, 0, 0) with zero Euler orientation.
@@ -35,7 +35,7 @@ class ThreeFingerGripper(Gripper):
         self.close = True
 
     # Utilities for joint control
-    def apply_joint_command(self, joint: int, target: float):
+    def apply_joint_command(self, joint: int, target: float) -> None:
         """
         Applies a simple position control command to one joint.
 
@@ -48,7 +48,7 @@ class ThreeFingerGripper(Gripper):
         p.setJointMotorControl2(self.id, joint, p.POSITION_CONTROL,
                                 targetPosition=target, maxVelocity=2, force=5)
 
-    def get_joint_positions(self):
+    def get_joint_positions(self) -> list[float]:
         """
         Returns current joint angles for all joints in the gripper.
 
@@ -71,7 +71,7 @@ class ThreeFingerGripper(Gripper):
             return [0.0] * self.num_joints
 
     # Opening the gripper
-    def open_gripper(self):
+    def open_gripper(self) -> None:
         """
         Opens the three-finger gripper.
 
@@ -101,7 +101,7 @@ class ThreeFingerGripper(Gripper):
             p.stepSimulation()
 
     # Computing grasp orientation
-    def find_orientation(self, obj_position: tuple[float, float, float]):
+    def find_orientation(self, obj_position: tuple[float, float, float]) -> tuple[float, float, float]:
         """
         Computes a noisy approach orientation toward the object
 
@@ -142,7 +142,7 @@ class ThreeFingerGripper(Gripper):
         return pitch_noisy, roll_noisy, yaw_noisy
 
     # Closing the gripper
-    def close_gripper(self):
+    def close_gripper(self) -> None:
         """
         Closes all three fingers by applying target angles to all joints.
 
@@ -163,7 +163,7 @@ class ThreeFingerGripper(Gripper):
             time.sleep(1.0 / 240.0)
 
     # Performing a grasp and lift
-    def grasp_lift(self, lift_height:float =0.4, lift_steps: int =150):
+    def grasp_lift(self, lift_height:float =0.4, lift_steps: int =150) -> None:
         """
         Performs a grasping lift operation after contact has formed.
 

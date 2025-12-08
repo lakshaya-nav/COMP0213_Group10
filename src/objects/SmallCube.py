@@ -9,6 +9,6 @@ class SmallCube(BaseObject):
         Attributes:
             grasp_height (float): The default height above the cube at which it can be grasped.
     """
-    def __init__(self, position, orientation=(0, 0, 0), scale=1.0):
+    def __init__(self, position, orientation=(0, 0, 0), scale=1.0) -> None:
         super().__init__('objects/urdf_files/cube_small.urdf', position, orientation, scale)
         self.grasp_height = 0.03

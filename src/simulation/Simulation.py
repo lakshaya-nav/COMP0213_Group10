@@ -19,7 +19,7 @@ class Simulation:
     experiments used in grasp planning and evaluation.
     """
 
-    def __init__(self, objects: list, grippers: list, envs: list):
+    def __init__(self, objects: list, grippers: list, envs: list)  -> None:
         """
         Initialises the simulation controller.
 
@@ -43,7 +43,7 @@ class Simulation:
 
     # VISUAL ENVIRONMENT SETUP
     @staticmethod
-    def setup_environment_visual():
+    def setup_environment_visual() -> int:
         """
         Sets up a PyBullet visual simulation environment, with GUI.
 
@@ -62,7 +62,7 @@ class Simulation:
 
     # NON-VISUAL ENVIRONMENT SETUP
     @staticmethod
-    def setup_environment_non_visual():
+    def setup_environment_non_visual() -> int:
         """
         Sets up a PyBullet non-visual simulation environment, without GUI.
 
@@ -81,14 +81,14 @@ class Simulation:
         p.setRealTimeSimulation(0)
         return p.loadURDF("plane.urdf")
 
-    def spawn_objects(self):
+    def spawn_objects(self) -> None:
         """
         Loads all objects into the simulation using their internal load() method.
         """
         for i in range(self.num_objects):
             self.objects[i].load()
 
-    def spawn_grippers(self):
+    def spawn_grippers(self) -> None:
         """
         Loads all urdf_files into the simulation and prepares them for interaction.
 
@@ -111,7 +111,7 @@ class Simulation:
             self.grippers[i].attach_fixed()
             self.grippers[i].open_gripper()
 
-    def move_towards_objs_and_close(self, i: int):
+    def move_towards_objs_and_close(self, i: int) -> int:
         """
         Moves each gripper toward its target object position and closes the gripper
         once all urdf_files have reached their respective approach points.
@@ -187,7 +187,7 @@ class Simulation:
 
         return terminate
 
-    def lift_objects(self, lift_height: float =0.4):
+    def lift_objects(self, lift_height: float =0.4) -> None:
         """
         Lifts all grasped objects by raising the urdf_files vertically over a given height.
 
@@ -235,7 +235,7 @@ class Simulation:
             # Move two-finger urdf_files up
             for g, pos in zip(grippers_2, current_pos_2):
                 pos[2] += step_size
-                g.move_up(pos[2], 0.0)
+                g.move_up(pos[2])
 
                 # maintain grip force during lift
                 for joint in [0, 2]:
@@ -263,7 +263,7 @@ class Simulation:
                 p.stepSimulation()
                 time.sleep(0.01)
 
-    def hold_3_seconds(self):
+    def hold_3_seconds(self) -> None:
         """
         Maintains finger closure for ≈3 seconds to stabilise the grasp.
 
@@ -289,7 +289,7 @@ class Simulation:
             p.stepSimulation()
             time.sleep(time_step)
 
-    def remove_objs(self):
+    def remove_objs(self) -> None:
         """
         Removes all urdf_files and objects from the simulation environment.
 

@@ -39,7 +39,7 @@ class Gripper(ABC):
     """
 
     def __init__(self, urdf_path: str, base_position: tuple[float, float, float],
-                  base_orientation: tuple[float, float, float]):
+                  base_orientation: tuple[float, float, float]) -> None:
         self._urdf_path = urdf_path
         self.base_position = list(base_position)
         self.base_orientation = p.getQuaternionFromEuler(base_orientation)
@@ -48,7 +48,7 @@ class Gripper(ABC):
         self.grasp_moving = False
         self.num_joints = 0
 
-    def load(self):
+    def load(self) -> int:
         """
         Load gripper URDF into the PyBullet simulation
 
@@ -64,7 +64,7 @@ class Gripper(ABC):
         self.num_joints = p.getNumJoints(self.id)
         return self.id
 
-    def attach_fixed(self):
+    def attach_fixed(self) -> None:
         """
         Attaching gripper to the pybullet world using a fixed constraint
 
@@ -86,7 +86,7 @@ class Gripper(ABC):
 
     @staticmethod
 
-    def create_points_sphere(obj_pos: tuple[float, float, float], radius: float, n: int):
+    def create_points_sphere(obj_pos: tuple[float, float, float], radius: float, n: int) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
         """
         Generate n random points on a spherical surface around the object
 
@@ -134,7 +134,7 @@ class Gripper(ABC):
         return x, y, z
 
     @abstractmethod
-    def open_gripper(self):
+    def open_gripper(self) -> None:
         """
         Open the gripper fingers/jaws
 
@@ -143,7 +143,7 @@ class Gripper(ABC):
         pass
 
     @abstractmethod
-    def close_gripper(self):
+    def close_gripper(self) -> None:
         """
         Close the gripper fingers/jaws
 
@@ -152,7 +152,7 @@ class Gripper(ABC):
         pass
 
     @abstractmethod
-    def find_orientation(self, obj_pos: tuple[float, float, float]):
+    def find_orientation(self, obj_pos: tuple[float, float, float]) -> tuple:
         """
         Compute desired gripper orientation relative to object/target position
 
@@ -167,7 +167,7 @@ class Gripper(ABC):
         pass
 
     @abstractmethod
-    def grasp_lift(self, obj: object, target_pos: tuple[float, float, float], lift_height:float =0.4, lift_steps:int =150):
+    def grasp_lift(self, obj: object, target_pos: tuple[float, float, float], lift_height:float =0.4, lift_steps:int =150) -> bool:
         """
         Perform a grasp and lift on an object
 

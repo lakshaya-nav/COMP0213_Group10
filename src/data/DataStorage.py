@@ -1,12 +1,13 @@
 import numpy as np
 import csv
 import pybullet as p
+from objects.BaseObject import BaseObject
 from grippers.BaseGripper import Gripper
 from grippers.GripperTwo import TwoFingerGripper
 from grippers.GripperThree import ThreeFingerGripper
 
 class DataStorage:
-    def __init__(self, radii, obj, gripper_type):
+    def __init__(self, radii: list[float], obj: BaseObject, gripper_type: int) -> None:
         """
             Class to manage the generation, storage, and export of gripper-object pair data.
 
@@ -31,7 +32,7 @@ class DataStorage:
         elif self.gripper_type == 3:
             self.gripper = ThreeFingerGripper()
 
-    def add_position(self):
+    def add_position(self) -> None:
         """
             Generates sample points on spheres of different radii around object.
             Stores the points in keys: x, y, z in data dictionary.
@@ -43,7 +44,7 @@ class DataStorage:
             self.data['y'].extend(y)
             self.data['z'].extend(z)
 
-    def find_base_position(self):
+    def find_base_position(self) -> None:
         """
             Calculates gripper's base positions for each sampled point around object.
             Approach pose (base positions) are extended be a factor of 2 from grasp pose (sampled points) along the vector from object to point.
@@ -55,7 +56,7 @@ class DataStorage:
             self.base_position['y'].append(((self.data['y'][i] - self.obj_pos[1]) * scalar) + self.data['y'][i])
             self.base_position['z'].append(((self.data['z'][i] - self.obj_pos[2]) * scalar) + self.data['z'][i])
 
-    def add_orientation(self):
+    def add_orientation(self) -> None:
         """
             Calculates orientation (pitch, roll, yaw) of gripper for each base position.
             Stores the results in keys: pitch, roll and yaw in data dictionary.
@@ -71,7 +72,7 @@ class DataStorage:
             self.data['roll'].append(roll)
             self.data['yaw'].append(yaw)
 
-    def lifted_or_not(self, terminate=0):
+    def lifted_or_not(self, terminate=0) -> bool :
         """
             Determines if object has been lifted successfully based on its z-position.
 
@@ -91,8 +92,9 @@ class DataStorage:
             state = 0
         # Append outputs to the data dictionary
         self.data['outputs'].append(state)
+        return False
 
-    def dict_to_csv(self, filename):
+    def dict_to_csv(self, filename: str) -> None:
         """
             Exports collected gripper + object data saved in a dictionary to a CSV file.
 
@@ -108,7 +110,7 @@ class DataStorage:
             writer.writerow(keys)
             writer.writerows(values)
 
-    def input_data(self):
+    def input_data(self) -> None:
         """
             Generates all input data for gripper-object pair.
 
@@ -120,7 +122,7 @@ class DataStorage:
         self.find_base_position()
         self.add_orientation()
 
-    def output_data(self, filename):
+    def output_data(self, filename: str) -> None:
         """
            Exports collected input + output data to a CSV file.
 

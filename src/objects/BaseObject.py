@@ -12,7 +12,7 @@ class BaseObject:
             _id (int or None): The unique PyBullet ID assigned to the object after loading. Initialized as None.
             _name (str or None): The name of the object, typically derived from its class and ID. Initialized as None.
         """
-    def __init__(self, urdf_file, position, orientation, scale):
+    def __init__(self, urdf_file: str, position: tuple[float, float, float], orientation: tuple[float, float, float], scale: float) -> None:
         self._urdf_file = urdf_file
         self.position = position
         self.orientation = p.getQuaternionFromEuler(orientation)
@@ -20,7 +20,7 @@ class BaseObject:
         self._id = None
         self._name = None
 
-    def load(self):
+    def load(self) -> int:
         """
             Loads the object into the PyBullet simulation.
 
@@ -31,7 +31,7 @@ class BaseObject:
                               globalScaling=self.scale)
         return self._id
 
-    def update_name(self, _id):
+    def update_name(self, _id) -> None:
         """
             Updates the object's name based on its class and PyBullet ID.
 
