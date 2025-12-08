@@ -1,1 +1,75 @@
+from grippers.BaseGripper import Gripper
+import pybullet as p
+import time
+import math
+import numpy as np
+
+
+class TwoFingerGripper(Gripper):
+    def __init__(self):
+        super().__init__('pr2_gripper.urdf', (0, 0, 0), (0, 0, 0))
+
+    def open_gripper(self):
+        initial_positions = [0.550569, 0.0, 0.549657, 0.0]
+        for i, pos in enumerate(initial_positions):
+            p.resetJointState(self.id, i, pos)
+
+    def close_gripper(self):
+        for joint in [0, 2]:
+            p.setJointMotorControl2(self.id, joint, p.POSITION_CONTROL,
+                                    targetPosition=0.1, maxVelocity=10, force=100)
+
+    def find_orientation(self, obj_position):
+        vector = (self.base_position[0] - obj_position[0],
+                  self.base_position[1] - obj_position[1],
+                  self.base_position[2] - obj_position[2])
+        length = math.sqrt(sum(v ** 2 for v in vector))
+        self.direction = [v / length for v in vector]
+
+        std_dev = 0.05
+        yaw = ((3 / 2) * math.pi) - math.atan2(vector[0], vector[1])
+        roll = math.atan2(vector[2], math.sqrt(vector[0] ** 2 + vector[1] ** 2))
+        roll_noisy = roll + np.random.normal(0, std_dev)
+        yaw_noisy = yaw + np.random.normal(0, std_dev)
+        pitch_noisy = 0 + np.random.normal(0, std_dev)
+        return pitch_noisy, roll_noisy, yaw_noisy
+
+    def move_up(self, z, yaw=0.0):
+        if self.constraint_id is None:
+            raise ValueError("Gripper must be fixed before moving.")
+
+        current_pos, current_ori = p.getBasePositionAndOrientation(self.id)
+        new_pos = [current_pos[0], current_pos[1], z]
+        p.changeConstraint(
+            self.constraint_id,
+            jointChildPivot=new_pos,
+            jointChildFrameOrientation=current_ori,  # Use current orientation
+            maxForce=50  # Increase maxForce to ensure object follows
+        )
+
+    def grasp_lift(self, obj, target_pos, lift_height=0.4, lift_steps=150):
+        yaw_angle = 0.0
+        grasp_height = obj.grasp_height
+
+        # --- Set friction on contact surfaces ---
+        for _ in range(10):  # allow contact to form
+            p.stepSimulation()
+            time.sleep(1. / 240.)
+
+            # --- Continuous hold while lifting step-by-step ---
+        z_current = grasp_height
+        z_target = lift_height
+        z_step = (z_target - z_current) / lift_steps
+
+        for _ in range(lift_steps):
+            z_current += z_step
+            self.move_up(z_current, yaw_angle)
+
+            for joint in [0, 2]:
+                p.setJointMotorControl2(self.id, joint, p.POSITION_CONTROL,
+                                        targetPosition=0.12, force=400, maxVelocity=2)
+            p.stepSimulation()
+            time.sleep(1. / 240.)
+
+
 

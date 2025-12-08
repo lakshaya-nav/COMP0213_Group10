@@ -13,8 +13,7 @@ class Gripper(ABC):
     the abstract methods for opening, closing, orienting, and executing 
     grasp-and-lift actions.
 
-    Parameters
-    ----------
+    Parameters:
     urdf_path : str
         Path to the URDF file describing the gripper model.
     base_position : sequence of float (len 3)
@@ -22,8 +21,7 @@ class Gripper(ABC):
     base_orientation : sequence of float (len 3)
         Euler angles (roll, pitch, yaw) used to compute the initial orientation.
 
-    Attributes
-    ----------
+    Attributes:
     _urdf_path : str
         Stored URDF path for internal use.
     base_position : list[float]
@@ -41,22 +39,12 @@ class Gripper(ABC):
     """
 
     def __init__(self, urdf_path: str, base_position: tuple[float, float, float], base_orientation: tuple[float, float, float]):
-        # Path to the URDF file describing the gripper
         self._urdf_path = urdf_path
-
-        # Base in x, y, z position in PyBullet
         self.base_position = list(base_position)
-
-        # Euler to quaternion conversion for orientation
         self.base_orientation = p.getQuaternionFromEuler(base_orientation)
-        
-        # PyBullet IDs
         self.id = None
         self.constraint_id = None
-
-        # Tracking gripper movement state
         self.grasp_moving = False
-
         self.num_joints = 0
 
     def load(self):
@@ -104,8 +92,7 @@ class Gripper(ABC):
         This method samples points uniformly on a spherical surface restricted to a polar angle range (0° to 80°), with norm/gaussian noise
         The sampled points can be used as the approach or grasp points
 
-        Parameters
-        ----------
+        Parameters:
         obj_pos : tuple[float, float, float]
             Center of the sphere (typically the object's position)
         radius : float
@@ -113,8 +100,7 @@ class Gripper(ABC):
         n : int
             Number of sample points
 
-        Returns
-        -------
+        Returns:
         tuple of np.ndarray
             Arrays (x, y, z) each of length n, representing sampled points
         """
@@ -168,13 +154,11 @@ class Gripper(ABC):
         """
         Compute desired gripper orientation relative to object/target position
 
-        Parameters
-        ----------
+        Parameters:
         obj_pos : tuple[float, float, float]
             The target object's position.
 
-        Returns
-        -------
+        Returns:
         tuple or list
             Orientation values (Euler or quaternion)
         """
@@ -185,8 +169,7 @@ class Gripper(ABC):
         """
         Perform a grasp and lift on an object
 
-        Parameters
-        ----------
+        Parameters:
         obj : Object
             The object instance to grasp
         target_pos : tuple[float, float, float]
@@ -196,10 +179,9 @@ class Gripper(ABC):
         lift_steps : int, optional
             Number of simulation steps used during the lifting motion
 
-        Returns
-        -------
+        Returns:
         bool
-            True if the lift is successful, False otherwise
+            True if the lift  is successful, False otherwise
         """
         pass
 
