@@ -1,4 +1,4 @@
-from BaseObject import BaseObject
+from objects.BaseObject import BaseObject
 
 class Cylinder(BaseObject):
     """
