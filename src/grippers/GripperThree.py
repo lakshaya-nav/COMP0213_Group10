@@ -1,4 +1,4 @@
-from BaseGripper import Gripper
+from grippers.BaseGripper import Gripper
 import pybullet as p
 import time
 import math
