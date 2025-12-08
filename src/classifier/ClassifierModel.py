@@ -7,6 +7,9 @@ import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 from sklearn.preprocessing import StandardScaler
+import pickle
+from pathlib import Path
+
 
 class LogReg:
     """
@@ -194,6 +197,30 @@ class LogReg:
         self.confusion_matrix()
         self.roc_curve()
 
+        # Save model using file name as identifier
+        project_root = Path(__file__).resolve().parents[2]
+        model_dir = project_root / "src" / "classifier" / "trained_models"
+        model_dir.mkdir(parents=True, exist_ok=True)
+
+        file_stem = Path(self.file_name).stem.replace("dataset", "trained_model")
+        model_path = model_dir / f"{file_stem}.pkl"
+        self.save_model(model_path)
+
+    def save_model(self, output_path="model.pkl"):
+        """
+        Saves trained Logistic Regression model to a .pkl file.
+
+        Args:
+            output_path (str): Path where model file will be saved.
+        """
+
+        # Ensure directory exists
+        output_path = Path(output_path)
+        output_path.parent.mkdir(parents=True, exist_ok=True)
+
+        with open(output_path, "wb") as f:
+            pickle.dump(self.logreg, f)
+
 
 def run_models():
     """
@@ -212,14 +239,16 @@ def run_models():
     Raises:
         FileNotFoundError: If any of the hardcoded CSV files are missing from the working directory.
     """
-    file1 = LogReg("output_g2_cube.csv")
+    file1 = LogReg("../data/dataset_g2_cube_final.csv")
     file1.full_operation()
 
-    file2 = LogReg("output_g2_cylinder.csv")
+    file2 = LogReg("../data/dataset_g2_cylinder_final.csv")
     file2.full_operation()
 
-    file3 = LogReg("output_g3_cube.csv")
+    file3 = LogReg("../data/dataset_g3_cube_final.csv")
     file3.full_operation()
 
-    file4 = LogReg("output_g3_cylinder.csv")
+    file4 = LogReg("../data/dataset_g3_cylinder_final.csv")
     file4.full_operation()
+
+run_models()
