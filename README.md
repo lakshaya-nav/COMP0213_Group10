@@ -67,7 +67,11 @@ COMP0213_Group10/
         └── ClassifierModel.py
 ```
 ## Troubleshooting
-* Path Issues: If you encounter ```FileNotFoundError``` related to CSVs or models, ensure you are running the script from inside the src folder, as the relative paths (e.g., ../data/) depend on the execution context.
+* Path Issues: If you encounter ```FileNotFoundError``` related to CSVs or models, ensure you are running the script from inside the src folder, as the relative paths (e.g., ../data/) depend on the execution context. Ensure that the src is the source root folder in the local IDE configuration. Example, for VS Code:
+   1. Open settings
+   2. In the search bar, type: "extraPaths"
+   3. Click 'Add item' for Python › Analysis: Extra Paths, and add the path to the src folder. ``` ${workspaceFolder}/src```
+   4. Click  'Edit in Settings' for Python › Auto Complete: Extra Paths, and add the path to the src folder. ``` ${workspaceFolder}/src```
 
 * PyBullet GUI: The simulation runs in ```p.GUI``` mode by default. If you are running this on a headless server, you may need to change ```p.connect(p.GUI)``` to ```p.connect(p.DIRECT)``` in ```src/simulation/Simulation.py.```
 
