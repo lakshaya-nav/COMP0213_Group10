@@ -103,7 +103,7 @@ class Simulation:
 
             # Validating the gripper spawn/raising error if it fails
             if g.id < 0 or p.getNumJoints(g.id) == 0:
-                raise RuntimeError(f"Failed to load gripper {g.id} from {g._urdf_path}")
+                raise RuntimeError(f"Failed to load gripper {g.id} from {g.__urdf_path}")
             else:
                 print(f"Successfully loaded gripper {g.id}")
 

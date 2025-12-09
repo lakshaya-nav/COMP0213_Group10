@@ -5,7 +5,7 @@ class BaseObject:
         A parent class representing a general object in a PyBullet simulation scene.
 
         Attributes:
-            _urdf_file (str): Path to the URDF file representing the object's model.
+            __urdf_file (str): Path to the URDF file representing the object's model.
             position (tuple[float, float, float]): The (x, y, z) coordinates for the object's initial position.
             orientation (tuple[float, float, float]): The Euler angles (roll, pitch, yaw) for the object's initial orientation.
             scale (float): Scaling factor applied to the object when loaded in the simulation.
@@ -13,7 +13,7 @@ class BaseObject:
             _name (str or None): The name of the object, typically derived from its class and ID. Initialized as None.
         """
     def __init__(self, urdf_file: str, position: tuple[float, float, float], orientation: tuple[float, float, float], scale: float) -> None:
-        self._urdf_file = urdf_file
+        self.__urdf_file = urdf_file
         self.position = position
         self.orientation = p.getQuaternionFromEuler(orientation)
         self.scale = scale
@@ -27,7 +27,7 @@ class BaseObject:
             Returns:
                 _id (int): The unique PyBullet ID of the loaded object.
         """
-        self._id = p.loadURDF(self._urdf_file, basePosition=self.position, baseOrientation=self.orientation,
+        self._id = p.loadURDF(self.__urdf_file, basePosition=self.position, baseOrientation=self.orientation,
                               globalScaling=self.scale)
         return self._id
 

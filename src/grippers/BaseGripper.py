@@ -40,7 +40,7 @@ class Gripper(ABC):
 
     def __init__(self, urdf_path: str, base_position: tuple[float, float, float],
                   base_orientation: tuple[float, float, float]) -> None:
-        self._urdf_path = urdf_path
+        self.__urdf_path = urdf_path
         self.base_position = list(base_position)
         self.base_orientation = p.getQuaternionFromEuler(base_orientation)
         self.id = None
@@ -57,7 +57,7 @@ class Gripper(ABC):
             The PyBullet body unique ID of the loaded gripper
         """
 
-        self.id = p.loadURDF(self._urdf_path, basePosition=self.base_position, 
+        self.id = p.loadURDF(self.__urdf_path, basePosition=self.base_position,
                              baseOrientation=self.base_orientation)
 
         # Storing num of joints
