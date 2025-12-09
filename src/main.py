@@ -84,12 +84,14 @@ def run_simulation(num_samples=None):
                      [g2_cube, g2_cylinder, g3_cube, g3_cylinder],
                      [env_g2_cube, env_g2_cylinder, env_g3_cube, env_g3_cylinder])
 
-    # Prepare PyBullet environment
-    sim.setup_environment_visual()
+
 
     # Run simulation for all training data
     for i in range(sum(env_g2_cube.data_points)):
         print(f'Simulation no.{i}')
+
+        # Prepare PyBullet environment
+        sim.setup_environment_non_visual()
 
         # Spawn all objects into environment
         sim.spawn_objects()
@@ -135,9 +137,8 @@ def run_simulation(num_samples=None):
         env_g3_cube.output_data('output_g3_cube.csv')
         env_g3_cylinder.output_data('output_g3_cylinder.csv')
 
-    # Disconnect PyBullet after simulating all grasp poses
-    p.disconnect()
-
+        # Disconnect PyBullet after simulating all grasp poses
+        p.disconnect()
 
 def test_planner():
     """
@@ -188,9 +189,19 @@ def test_planner():
             print(f"Please run 'python main.py --mode train_classifier' first.")
             continue
         
-        # Load the model
+        # Load the model and scaler
         with open(model_path, "rb") as f:
-            model = pickle.load(f)
+            model_data = pickle.load(f)
+        
+        # Handle both old format (just model) and new format (dict with model and scaler)
+        if isinstance(model_data, dict):
+            model = model_data['model']
+            scaler = model_data['scaler']
+        else:
+            # Old format - just the model without scaler
+            model = model_data
+            scaler = None
+            print(f"⚠️  Warning: Model was saved without scaler. Please retrain with 'python main.py --mode train_classifier'")
         
         # Load and prepare the data
         data = pd.read_csv(output_path)
@@ -205,8 +216,14 @@ def test_planner():
         X = data[feature_cols]
         y = data['outputs'].astype(int)
         
+        # Scale features if scaler is available
+        if scaler is not None:
+            X_scaled = scaler.transform(X)
+        else:
+            X_scaled = X
+        
         # Make predictions
-        y_pred = model.predict(X)
+        y_pred = model.predict(X_scaled)
         
         # Calculate metrics
         accuracy = metrics.accuracy_score(y, y_pred)

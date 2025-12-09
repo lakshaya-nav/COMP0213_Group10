@@ -97,9 +97,9 @@ class LogReg:
         X_train, X_test, y_train, y_test = train_test_split(self._X, self._y, test_size=0.3, random_state=20)
 
         # Feature scaling
-        scaler = StandardScaler()
-        X_train_scaled = scaler.fit_transform(X_train)
-        X_test_scaled = scaler.transform(X_test)
+        self.__scaler = StandardScaler()
+        X_train_scaled = self.__scaler.fit_transform(X_train)
+        X_test_scaled = self.__scaler.transform(X_test)
 
         # Conducting Logistic Regression
         self.__logreg = LogisticRegression(max_iter=5000, random_state=16, class_weight='balanced')
@@ -222,7 +222,7 @@ class LogReg:
 
     def save_model(self, output_path="model.pkl") -> None:
         """
-        Saves trained Logistic Regression model to a .pkl file.
+        Saves trained Logistic Regression model and scaler to a .pkl file.
 
         Args:
             output_path (str): Path where model file will be saved.
@@ -232,8 +232,13 @@ class LogReg:
         output_path = Path(output_path)
         output_path.parent.mkdir(parents=True, exist_ok=True)
 
+        # Save both model and scaler together
+        model_data = {
+            'model': self.__logreg,
+            'scaler': self.__scaler
+        }
         with open(output_path, "wb") as f:
-            pickle.dump(self.__logreg, f)
+            pickle.dump(model_data, f)
 
 
 def run_models() -> None:
