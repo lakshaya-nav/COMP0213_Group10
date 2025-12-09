@@ -273,7 +273,7 @@ class Simulation:
         """
 
         # Duration and timing setup
-        hold_time = 3.0
+        hold_time = 0.5
         time_step = 1. / 240.
         num_steps = int(hold_time / time_step)
 
