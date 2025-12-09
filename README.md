@@ -161,7 +161,7 @@ def run_simulation(num_samples=None):
 
     
     # Prepare PyBullet environment
-    sim.setup_environment_non_visual()    
+    sim.setup_environment_visual()    
 
     # Run simulation for all training data
     for i in range(sum(env_g2_cube.data_points)):
