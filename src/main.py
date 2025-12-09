@@ -229,7 +229,7 @@ def test_planner():
         print(f"  Actual Success: {cm[1][0]:4d}    {cm[1][1]:4d}")
     
     print("\n" + "=" * 60)
-    print("Planner testing completed!")
+    print("Planner testing completed")
 
 
 def parse_arguments():
