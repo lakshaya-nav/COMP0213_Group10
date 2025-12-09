@@ -86,6 +86,8 @@ COMP0213_Group10/
         └── ClassifierModel.py
 ```
 ## Troubleshooting
+* Discrepency in Data Generation Accuracy: Due to an unknown error, after splitting all the classes into separate Python files, the accuracy of grasps significantly decreased, specifically for the 2-finger gripper and Cylinder pair. Additionally, more of the simulations failed, resulting in more NaN values than before. The previous code is provided, by the path ``` src/main_before_splitting ```
+
 * Path Issues: If you encounter ```FileNotFoundError``` related to CSVs or models, ensure you are running the script from inside the src folder, as the relative paths (e.g., ../data/) depend on the execution context. Ensure that the src is the source root folder in the local IDE configuration. Example, for VS Code:
    1. Open settings
    2. In the search bar, type: "extraPaths"
