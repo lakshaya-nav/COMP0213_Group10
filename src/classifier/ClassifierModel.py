@@ -31,12 +31,25 @@ class LogReg:
 
     def __init__(self, file_name: str) -> None:
         """
-        Initializes the LogReg class with the target file.
+            Initializes the LogReg class with the target file.
 
-        Args:
-            file_name (str): Path to the CSV file containing sensor data.
+            Args:
+                file_name (str): Path to the CSV file containing sensor data.
+
+            Attributes:
+                file_name (str): Path to the input CSV file.
+                _X (pd.DataFrame or None): Protected attribute to store feature dataset.
+                _y (pd.Series or None): Protected attribute to store target variable.
+                _y_test (np.ndarray or None): Protected attribute to store test labels.
+                _y_pred (np.ndarray or None): Protected attribute to store model predictions.
+                __logreg (LogisticRegression or None): Private attribute for the trained Logistic Regression model.
         """
         self.file_name = file_name
+        self._X = None
+        self._y = None
+        self._y_test = None
+        self._y_pred = None
+        self.__logreg = None
 
     def read_file(self) -> tuple[pd.DataFrame, pd.Series]:
         """
@@ -58,9 +71,9 @@ class LogReg:
         # Dropping NaNs from the dataset
         data = data.dropna(subset=['output'])
         feature_cols = ['x', 'y', 'z', 'pitch', 'roll', 'yaw']
-        self.X = data[feature_cols]  # Features
-        self.y = data.output.astype(int)  # Target variable
-        return self.X, self.y
+        self._X = data[feature_cols]  # Features
+        self._y = data.output.astype(int)  # Target variable
+        return self._X, self._y
 
     def conduct_regression(self) -> tuple[np.ndarray, np.ndarray]:
         """
@@ -77,10 +90,10 @@ class LogReg:
                 - y_test (np.array): The actual values of the test set.
                 - y_pred (np.array): The predicted values of the test set.
         """
-        self.X, self.y = self.read_file()
+        self._X, self._y = self.read_file()
 
         # Splitting the data into test and training sets
-        X_train, X_test, y_train, y_test = train_test_split(self.X, self.y, test_size=0.3, random_state=20)
+        X_train, X_test, y_train, y_test = train_test_split(self._X, self._y, test_size=0.3, random_state=20)
 
         # Feature scaling
         scaler = StandardScaler()
@@ -88,12 +101,12 @@ class LogReg:
         X_test_scaled = scaler.transform(X_test)
 
         # Conducting Logistic Regression
-        self.logreg = LogisticRegression(max_iter=5000, random_state=16, class_weight='balanced')
+        self.__logreg = LogisticRegression(max_iter=5000, random_state=16, class_weight='balanced')
         # Fitting the data
-        self.logreg.fit(X_train_scaled, y_train)
-        y_pred = self.logreg.predict(X_test_scaled)
-        self.y_test = y_test
-        self.y_pred = y_pred
+        self.__logreg.fit(X_train_scaled, y_train)
+        y_pred = self.__logreg.predict(X_test_scaled)
+        self._y_test = y_test
+        self._y_pred = y_pred
         return y_test, y_pred
 
     def accuracy_precision_recall_f1(self) -> None:
@@ -107,12 +120,12 @@ class LogReg:
         - Recall: Ratio of correctly predicted positive observations to all observations in actual class.
         - F1 Score: The weighted average of Precision and Recall.
         """
-        self.y_test, self.y_pred = self.conduct_regression()
+        self._y_test, self._y_pred = self.conduct_regression()
         # Accuracy, Precision, Recall, F1 Score
-        print("Logistic Regression Accuracy:", metrics.accuracy_score(self.y_test, self.y_pred))
-        print("Logistic Regression Precision:", metrics.precision_score(self.y_test, self.y_pred))
-        print("Logistic Regression Recall:", metrics.recall_score(self.y_test, self.y_pred))
-        print("Logistic Regression F1 Score:", metrics.f1_score(self.y_test, self.y_pred))
+        print("Logistic Regression Accuracy:", metrics.accuracy_score(self._y_test, self._y_pred))
+        print("Logistic Regression Precision:", metrics.precision_score(self._y_test, self._y_pred))
+        print("Logistic Regression Recall:", metrics.recall_score(self._y_test, self._y_pred))
+        print("Logistic Regression F1 Score:", metrics.f1_score(self._y_test, self._y_pred))
 
     def confusion_matrix(self) -> None:
         """
@@ -122,10 +135,10 @@ class LogReg:
         predicted values against actual values.
 
         """
-        self.y_test, self.y_pred = self.conduct_regression()
+        self._y_test, self._y_pred = self.conduct_regression()
 
         # Plotting a Confusion Matrix
-        cnf_matrix = metrics.confusion_matrix(self.y_test, self.y_pred)
+        cnf_matrix = metrics.confusion_matrix(self._y_test, self._y_pred)
         class_names = [0, 1]  # name  of classes
         fig, ax = plt.subplots()
         tick_marks = np.arange(len(class_names))
@@ -151,12 +164,12 @@ class LogReg:
         Note:
             self.logreg is an accessible attribute of the class.
         """
-        self.y_test, self.y_pred = self.conduct_regression()
+        self._y_test, self._y_pred = self.conduct_regression()
 
         # Calculating True Positive Rate (TPR), False Positive Rate (FPR) and the AUC
-        y_pred_proba = self.logreg.predict_proba(self.X)[:, 1]
-        fpr, tpr, _ = metrics.roc_curve(self.y, y_pred_proba)
-        auc = metrics.roc_auc_score(self.y, y_pred_proba)
+        y_pred_proba = self.__logreg.predict_proba(self._X)[:, 1]
+        fpr, tpr, _ = metrics.roc_curve(self._y, y_pred_proba)
+        auc = metrics.roc_auc_score(self._y, y_pred_proba)
 
         # Plotting the ROC Curve
         plt.figure(2)
@@ -175,8 +188,8 @@ class LogReg:
         particularly useful when classes are of very different sizes.
         Returns a value between -1 and +1.
         """
-        self.y_test, self.y_pred = self.conduct_regression()
-        print("Matthew's correlation coefficient:", metrics.matthews_corrcoef(self.y_test, self.y_pred))
+        self._y_test, self._y_pred = self.conduct_regression()
+        print("Matthew's correlation coefficient:", metrics.matthews_corrcoef(self._y_test, self._y_pred))
 
     def full_operation(self) -> None:
         """
@@ -219,7 +232,7 @@ class LogReg:
         output_path.parent.mkdir(parents=True, exist_ok=True)
 
         with open(output_path, "wb") as f:
-            pickle.dump(self.logreg, f)
+            pickle.dump(self.__logreg, f)
 
 
 def run_models() -> None:
