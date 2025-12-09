@@ -26,7 +26,7 @@ class Simulation:
         Parameters:
         objects : list
             A list of object instances to be spawned.
-        urdf_files : list
+        grippers : list
             A list of gripper instances (TwoFingerGripper, ThreeFingerGripper, etc.).
         envs : list
             A list of environment data structures storing sampling positions,
@@ -103,7 +103,7 @@ class Simulation:
 
             # Validating the gripper spawn/raising error if it fails
             if g.id < 0 or p.getNumJoints(g.id) == 0:
-                raise RuntimeError(f"Failed to load gripper {g.id} from {g._urdf_path}")
+                raise RuntimeError(f"Failed to load gripper {g.id}")
             else:
                 print(f"Successfully loaded gripper {g.id}")
 
