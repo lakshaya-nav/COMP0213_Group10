@@ -41,7 +41,8 @@ __What you should see when you run it:__
 
 ## Project Structure
 
-``` COMP0213_Group10/
+```
+COMP0213_Group10/
 ├── requirements.txt         # List of python dependencies
 ├── README.md                # Project documentation
 └── src/
