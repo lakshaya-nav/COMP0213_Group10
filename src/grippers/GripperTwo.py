@@ -96,7 +96,7 @@ class TwoFingerGripper(Gripper):
         return pitch_noisy, roll_noisy, yaw_noisy
 
     # Moving up the gripper
-    def move_up(self, z: float) -> None:
+    def move_up(self, z: float, yaw:float =0.0) -> None:
         """
         Moves the gripper vertically upward, but also maintains current orientation
 
@@ -131,7 +131,7 @@ class TwoFingerGripper(Gripper):
         )
 
     # Grasp and lift method
-    def grasp_lift(self, obj: BaseObject, lift_height:float =0.4, lift_steps:int =150) -> None:
+    def grasp_lift(self, obj: BaseObject, target_pos, lift_height:float =0.4, lift_steps:int =150) -> None:
         """
         Perform a grasping lift operation after making contact with an object.
 
