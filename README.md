@@ -25,11 +25,10 @@ This project is based in Python. Ensure that Python 3.x is installed. Additional
 1. Clone or download the repository
 2. Navigate to the project root directory from the terminal
 3. Install the required Python packages from the requirements.txt file by using the following command:
-  pip install -r requirements.txt
+
+``` pip install -r requirements.txt ```
 
 ## Usage
-
-   
 
 
 
