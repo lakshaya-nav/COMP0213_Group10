@@ -9,6 +9,7 @@ import seaborn as sns
 from sklearn.preprocessing import StandardScaler
 import pickle
 from pathlib import Path
+import os
 
 
 class LogReg:
@@ -239,14 +240,19 @@ def run_models() -> None:
     Raises:
         FileNotFoundError: If any of the hardcoded CSV files are missing from the working directory.
     """
-    file1 = LogReg("../data/dataset_g2_cube_final.csv")
+    # Get the directory where this script is located
+    script_dir = Path(__file__).parent
+    # Build paths relative to the src directory
+    data_dir = script_dir.parent / "data"
+    
+    file1 = LogReg(str(data_dir / "dataset_g2_cube_final.csv"))
     file1.full_operation()
 
-    file2 = LogReg("../data/dataset_g2_cylinder_final.csv")
+    file2 = LogReg(str(data_dir / "dataset_g2_cylinder_final.csv"))
     file2.full_operation()
 
-    file3 = LogReg("../data/dataset_g3_cube_final.csv")
+    file3 = LogReg(str(data_dir / "dataset_g3_cube_final.csv"))
     file3.full_operation()
 
-    file4 = LogReg("../data/dataset_g3_cylinder_final.csv")
+    file4 = LogReg(str(data_dir / "dataset_g3_cylinder_final.csv"))
     file4.full_operation()
