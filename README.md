@@ -65,24 +65,28 @@ python main.py --mode test_planner
 
 ```
 COMP0213_Group10/
-├── requirements.txt         # List of python dependencies
-├── README.md                # Project documentation
+├── requirements.txt               # List of python dependencies
+├── README.md                      # Project documentation
+├── uml_diagram.png                # UML Diagram for reference
 └── src/
-    ├── main.py              # Entry point for simulation and training
-    ├── simulation/          # Physics engine wrapper
-    │   ├── Simulation.py    # Main simulation class (setup, loops)
-    │   └── utils.py         # Helper functions
-    ├── objects/             # Object definitions (URDFs, logic)
+    ├── main.py                    # Entry point for simulation and training
+    ├── main_before_splitting.py   # Entry point for simulation and training before modularisation
+    ├── simulation/                # Physics engine wrapper
+    │   ├── Simulation.py          # Main simulation class (setup, loops)
+    │   └── utils.py               # Helper functions
+    ├── objects/                   # Object definitions (URDFs, logic)
     │   ├── BaseObject.py
     │   ├── SmallCube.py
     │   └── Cylinder.py
-    ├── grippers/            # Gripper definitions (Kinematics, Control)
+    ├── grippers/                  # Gripper definitions (Kinematics, Control)
     │   ├── BaseGripper.py
     │   ├── GripperTwo.py
     │   └── GripperThree.py
-    ├── data/                # Data storage logic and CSV datasets
+    ├── misc/                      # Data storage logic and CSV datasets
+    │   ├── grasp_pose_plot.py
+    ├── data/                      # Data storage logic and CSV datasets
     │   └── DataStorage.py
-    └── classifier/          # Machine Learning logic
+    └── classifier/                # Machine Learning logic
         └── ClassifierModel.py
 ```
 ## Troubleshooting
