@@ -30,6 +30,7 @@ This project is based in Python. Ensure that Python 3.x is installed. Additional
    ```
 
 ## Usage
+### Running the entire pipeline
 The entire pipeline is designed to be carried out by the ``` main.py ``` script.
 1. Navigate to the source directory: ``` cd src ```
 2. Run the main script:  ``` python main.py ```
@@ -41,6 +42,24 @@ __What you should see when you run it:__
 4. After the simulation, the script triggers model training on the acquired data.
 5. The terminal will output accuracy metrics and plots for the Confusion Matrices and ROC will be generated
 6. The trained model is saved as a ``` .pkl ``` file.
+
+### Running using argparse
+While the entire pipeline can be run using the ``` main.py ``` script, generating and testing new samples can also be done using ``` argparse ```. 
+
+__To generate new data__:
+```
+python main.py --mode generate_data --num_samples 150      # 150 can be changed to number of desired samples
+```
+
+__To train classifier on existing data__:
+```
+python main.py --mode train_classifier
+```
+
+__To test the generated data on existing model__:
+```
+python main.py --mode test_planner
+```
 
 ## Project Structure
 
