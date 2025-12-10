@@ -224,4 +224,7 @@ def run_simulation(num_samples=None):
 
 ```
 
+## Note
+In the ``` ClassifierModel.py ``` file we have included the ```roc_curve()``` function, however, the generated ROC curves have not been mentioned in the report due to space constraints. 
+
   
